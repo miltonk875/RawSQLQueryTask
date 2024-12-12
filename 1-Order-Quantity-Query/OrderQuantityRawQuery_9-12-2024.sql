@@ -1,10 +1,11 @@
 
 -- Total Orders By Given Today Date
 -- Default Type= sell, Other=
-SELECT COUNT(*) AS today_orders FROM transactions WHERE type ='sell' AND DATE(transaction_date) = '2024-12-10';
+SELECT COUNT(*) AS today_orders FROM transactions WHERE type ='sell' AND DATE(transaction_date) >= '2024-12-11' AND DATE(transactions.transaction_date) <= '2024-12-11';
+
 
 -- Total Orders By Given Date (Yesterday)
-SELECT COUNT(*) AS yesterday_orders FROM transactions WHERE type ='sell' AND DATE(transaction_date) = '2024-12-08';
+SELECT COUNT(*) AS yesterday_orders FROM transactions WHERE type ='sell' AND DATE(transaction_date) >= '2024-12-11' AND DATE(transactions.transaction_date) <= '2024-12-11';
 
 -- Total Orders By This Week (From :last_seven_day to :yesterday)
 SELECT COUNT(*) AS week_orders FROM transactions WHERE type ='sell' AND transaction_date BETWEEN '2024-12-02' AND '2024-12-08';
