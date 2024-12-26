@@ -27,3 +27,4 @@ FROM (
     AND DATE(transaction_date) <= '2024-12-23'
     GROUP BY DATE(transaction_date)
 ) AS daily_averages;
+
