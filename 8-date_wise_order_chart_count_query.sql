@@ -1,6 +1,5 @@
 SELECT 
 DATE(transaction_date) AS transaction_date,
-DATE_FORMAT(transaction_date, '%l %p') AS transaction_time,
 COUNT(*) AS total_order_count 
 FROM transactions 
 WHERE business_id = 1 
