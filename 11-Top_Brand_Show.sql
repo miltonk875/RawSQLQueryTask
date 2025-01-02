@@ -62,3 +62,22 @@ GROUP BY
     b.id, b.name
 ORDER BY 
     total_brand_wise_products DESC;
+
+
+SELECT 
+    b.name AS brand_name,
+    COUNT(p.id) AS total_brand_wise_products,  -- Count of products for each brand
+    SUM(tsl.quantity) AS brand_wise_sales  -- Total sales (quantity sold) for each brand
+FROM 
+    brands b
+LEFT JOIN 
+    products p ON b.id = p.brand_id
+LEFT JOIN 
+    transaction_sell_lines tsl ON p.id = tsl.product_id
+WHERE 
+    b.business_id = 1  -- Replace with your business ID filter
+GROUP BY 
+    b.id, b.name
+ORDER BY 
+    brand_wise_sales DESC,  -- Optional: Sort by total sales in descending order
+    total_brand_wise_products DESC;  -- Optional: Sort by total products in descending order
