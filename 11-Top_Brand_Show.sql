@@ -8,8 +8,6 @@ WITH sales_data AS (
     FROM 
         products p
     LEFT JOIN 
-        variation_location_details vld ON p.id = vld.product_id
-    LEFT JOIN 
         transaction_sell_lines tsl ON p.id = tsl.product_id
     LEFT JOIN 
         brands b ON p.brand_id = b.id
@@ -48,3 +46,19 @@ FROM
 ORDER BY 
     total_sale DESC, brand_id DESC
 LIMIT 1000;
+
+
+------------- Brand Wise Products--------------
+SELECT 
+    b.name AS brand_name,
+    COUNT(p.id) AS total_brand_wise_products
+FROM 
+    brands b
+LEFT JOIN 
+    products p ON b.id = p.brand_id
+WHERE 
+    b.business_id = 1
+GROUP BY 
+    b.id, b.name
+ORDER BY 
+    total_brand_wise_products DESC;

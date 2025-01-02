@@ -13,6 +13,7 @@ WITH sales_data AS (
         transaction_sell_lines tsl ON p.id = tsl.product_id
     WHERE 
         p.business_id = 1
+		AND p.brand_id !=14
         AND vld.location_id = 1
         AND DATE(tsl.created_at) >= '2024-12-20'
         AND DATE(tsl.created_at) <= '2024-12-31'
