@@ -48,6 +48,7 @@ ORDER BY
 LIMIT 1000;
 
 
+
 ------------- Brand Wise Products--------------
 SELECT 
     b.name AS brand_name,

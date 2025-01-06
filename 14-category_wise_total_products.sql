@@ -14,3 +14,23 @@ GROUP BY
     c.id, c.name
 ORDER BY 
     total_products DESC
+	
+	
+	-------ALter Query No zerro Count
+	
+SELECT 
+	c.id AS category_id,
+    c.name AS category_name,
+    COUNT(p.id) AS total_products,
+FROM 
+    categories c
+LEFT JOIN 
+    products p ON c.id = p.category_id
+WHERE 
+    c.business_id = 1 
+GROUP BY 
+    c.id, c.name
+HAVING 
+    total_products > 0
+ORDER BY 
+    total_products DESC

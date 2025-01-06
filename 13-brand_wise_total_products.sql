@@ -13,4 +13,22 @@ WHERE
 GROUP BY 
     b.id, b.name
 ORDER BY 
-    total_products DESC;
+    total_products DESC; 
+
+
+SELECT 
+	b.id AS brand_id,
+    b.name AS brand_name,
+    COUNT(p.id) AS total_products,
+FROM 
+    brands b
+LEFT JOIN 
+    products p ON b.id = p.brand_id
+WHERE 
+    b.business_id = 1 
+GROUP BY 
+    b.id, b.name
+HAVING 
+    total_products > 0
+ORDER BY 
+    total_products DESC; 
