@@ -2,13 +2,13 @@ WITH last_days AS (
     SELECT 
     ROUND(SUM(quantity * price)) AS total_last_amount
     FROM order_details od
-    WHERE DATE(od.created_at) >= '2025-01-05' AND DATE(od.created_at) <= '2025-01-06'
+    WHERE DATE(od.created_at) >= '2025-01-10' AND DATE(od.created_at) <= '2025-01-11'
 ),
 previous_days AS (
     SELECT 
     ROUND(SUM(quantity * price)) AS total_previous_amount
     FROM order_details od
-    WHERE DATE(od.created_at) >= '2025-01-03' AND DATE(od.created_at) <= '2025-01-04'
+    WHERE DATE(od.created_at) >= '2025-01-08' AND DATE(od.created_at) <= '2025-01-09'
 )
 SELECT 
     (SELECT  FORMAT(ROUND(SUM(quantity * price)),2) FROM order_details od WHERE DATE(od.created_at) >= '2025-01-05' AND DATE(od.created_at) <= '2025-01-06') AS total_order_amount,
