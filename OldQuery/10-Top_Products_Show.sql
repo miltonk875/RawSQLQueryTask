@@ -85,6 +85,7 @@ JOIN qatar_ecommerce_db.products AS p ON p.id = b.product_id
 JOIN qatar_ecommerce_db.brands AS br ON p.brand_id = br.id
 JOIN qatar_ecommerce_db.categories AS c ON p.category_id = c.id
 JOIN qatar_pos_db.variation_location_details AS vld ON vld.product_id = p.id
+
 GROUP BY 
     p.id
 ORDER BY 
