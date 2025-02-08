@@ -1,3 +1,31 @@
+SELECT
+    YEAR(o.created_at) AS year,
+    COUNT(*) AS orders,
+    FORMAT(ROUND(SUM(grand_total), 0), 0) AS amount,
+    ROUND(
+        CASE 
+            WHEN IFNULL(o_prev.orders, 0) = 0 THEN 0
+            ELSE (COUNT(*) - o_prev.orders) / IFNULL(o_prev.orders, 1) * 100
+        END, 2
+    ) AS trend
+FROM
+    bbbd_ecommerce_test.orders AS o
+LEFT JOIN (
+    SELECT 
+        YEAR(created_at) AS prev_year,
+        COUNT(*) AS orders
+    FROM 
+        bbbd_ecommerce_test.orders
+    GROUP BY 
+        YEAR(created_at)
+) AS o_prev 
+    ON YEAR(o.created_at) = o_prev.prev_year + 1
+GROUP BY
+    YEAR(o.created_at), o_prev.orders
+ORDER BY
+    YEAR(o.created_at) DESC
+	
+------------------------------------ Sub Quater Query ----------------------------------------
 SELECT 
     CONCAT('Quarter ', q.quarter, ' (',
         CASE 
@@ -6,15 +34,14 @@ SELECT
             WHEN q.quarter = 3 THEN 'Sep-Dec'
         END, 
     ')') AS period,
-    IFNULL(COUNT(DISTINCT o.id), 0) AS total_sale_orders,
-    IFNULL(ROUND(SUM(o.grand_total), 2), 0) AS total_sale_amount,
-    IFNULL(MAX(od_prev.total_orders), 0) AS prev_order_sale, -- Use MAX() to ensure it's an aggregated value
+    IFNULL(COUNT(DISTINCT o.id), 0) AS orders,
+    IFNULL(ROUND(SUM(o.grand_total), 2), 0) AS amount,
     ROUND(
         CASE 
             WHEN IFNULL(MAX(od_prev.total_orders), 0) = 0 THEN 0
             ELSE (COUNT(DISTINCT o.id) - MAX(od_prev.total_orders)) / IFNULL(MAX(od_prev.total_orders), 1) * 100
         END, 2
-    ) AS percentage_change
+    ) AS trend
 FROM
     (SELECT 1 AS quarter
      UNION ALL
@@ -31,7 +58,7 @@ LEFT JOIN (
         YEAR(created_at) AS prev_year,
         COUNT(DISTINCT id) AS total_orders
     FROM 
-        qatar_ecommerce_db.orders
+        bbbd_ecommerce_test.orders
     WHERE YEAR(created_at) = 2024
     GROUP BY 
         YEAR(created_at)

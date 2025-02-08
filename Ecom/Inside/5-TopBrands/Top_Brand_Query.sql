@@ -1,15 +1,16 @@
 SELECT 
     b.name AS brand_name,
-    ROUND(COUNT(p.id)) AS total_product,
-    IFNULL(SUM(s.total_current_sale), 0) AS total_current_sale,
-    IFNULL(SUM(s.total_sale_amount), 0) AS total_sale_amount,
-    IFNULL(SUM(ps.previous_total_sale), 0) AS total_previous_sale,
+    COUNT(p.id) AS total_product,
+    IFNULL(SUM(s.total_current_sale), 0) AS current_sale,
+    IFNULL(SUM(s.total_sale_amount), 0) AS sale_amount,
+    IFNULL(SUM(ps.previous_total_sale), 0) AS previous_sale,
     ROUND(
         CASE 
             WHEN IFNULL(SUM(ps.previous_total_sale), 0) = 0 THEN 0
             ELSE (IFNULL(SUM(s.total_current_sale), 0) - IFNULL(SUM(ps.previous_total_sale), 0)) / IFNULL(SUM(ps.previous_total_sale), 1) * 100
         END, 2
-    ) AS percentage_change
+    ) AS percentage_change,
+    CONCAT('https://beautyboothqa.com/brands/', b.slug) AS link
 FROM brands AS b
 -- Join with products to get product details
 JOIN products AS p ON p.brand_id = b.id
@@ -22,7 +23,7 @@ LEFT JOIN (
     FROM 
         order_details AS od
     WHERE 
-        DATE(od.created_at) BETWEEN '2025-01-11' AND '2025-01-12'
+        od.created_at >= '2025-02-07 00:00:00' AND od.created_at < '2025-02-09 00:00:00'
     GROUP BY 
         od.product_id
 ) AS s ON p.id = s.product_id
@@ -34,15 +35,18 @@ LEFT JOIN (
     FROM 
         order_details AS od
     WHERE 
-        DATE(od.created_at) BETWEEN '2025-01-09' AND '2025-01-10'
+        od.created_at >= '2025-02-01 00:00:00' AND od.created_at < '2025-02-07 00:00:00' -- Adjusted date range for previous sales
     GROUP BY 
         od.product_id
 ) AS ps ON p.id = ps.product_id
-
 GROUP BY 
     b.id
 ORDER BY 
-    total_current_sale DESC;
+    SUM(s.total_current_sale) DESC
+LIMIT 0, 50000;
+
+
+
 ------------------------------------------ Search Brand,Category & Products ---------------------------------------------
 SELECT 
     b.name AS brand_name,
@@ -68,7 +72,7 @@ LEFT JOIN (
     FROM 
         order_details AS od
     WHERE 
-        DATE(od.created_at) BETWEEN '2025-01-11' AND '2025-01-12'
+        DATE(od.created_at) >= '2025-02-07' AND DATE(od.created_at) <= '2025-02-08')
     GROUP BY 
         od.product_id
 ) AS s ON p.id = s.product_id
@@ -80,7 +84,7 @@ LEFT JOIN (
     FROM 
         order_details AS od
     WHERE 
-        DATE(od.created_at) BETWEEN '2025-01-09' AND '2025-01-10'
+        DATE(od.created_at) >= '2025-02-07' AND DATE(od.created_at) <= '2025-02-08')
     GROUP BY 
         od.product_id
 ) AS ps ON p.id = ps.product_id

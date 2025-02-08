@@ -59,6 +59,8 @@ LEFT JOIN (
 LEFT JOIN qatar_pos_db.variation_location_details AS vld ON p.id = vld.product_id
 
 WHERE 
+	vld.location_id = 1;
+AND
     -- p.category_id = 136
     -- p.brand_id = 136
 

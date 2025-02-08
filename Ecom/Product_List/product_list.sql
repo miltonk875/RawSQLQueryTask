@@ -57,6 +57,8 @@ LEFT JOIN (
 
 -- Join with variation_location_details for current stock
 LEFT JOIN qatar_pos_db.variation_location_details AS vld ON p.id = vld.product_id
+WHERE 
+	vld.location_id = 1;
 
 GROUP BY 
     p.id
@@ -64,4 +66,4 @@ HAVING
     current_order > 0
 ORDER BY 
     current_order DESC
-LIMIT 1000;
+LIMIT 10;
