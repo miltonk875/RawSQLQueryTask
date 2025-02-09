@@ -1,6 +1,6 @@
 --------------------------------- Total Orders ----------------------------
 SELECT 
-    COUNT(o.id) AS total_order, 
+    COUNT(o.id) AS total_order
 FROM 
     bbbd_ecommerce_test.orders AS o
 WHERE 
