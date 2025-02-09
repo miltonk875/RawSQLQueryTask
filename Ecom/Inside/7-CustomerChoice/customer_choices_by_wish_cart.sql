@@ -1,7 +1,7 @@
 SELECT 
     p.id AS product_id,
     p.name AS product_name,
-    CONCAT('https://beautyboothqa.com/product/', p.slug) AS product_link,
+    CONCAT('product/', p.slug) AS product_link,
     COALESCE(COUNT(DISTINCT w.id), 0) AS total_wishlist,
     COALESCE(COUNT(DISTINCT c.id), 0) AS total_cart_items
 FROM bbbd_ecommerce_test.products p
@@ -18,7 +18,7 @@ ORDER BY p.id;
 SELECT 
     p.id AS product_id,
     p.name AS product_name,
-	CONCAT('https://beautyboothqa.com/product/', p.slug) AS product_link,
+	CONCAT('product/', p.slug) AS product_link,
     COALESCE(COUNT(DISTINCT w.id), 0) AS total_wishlist,
     COALESCE(COUNT(DISTINCT c.id), 0) AS total_cart_items
 FROM bbbd_ecommerce_test.products p

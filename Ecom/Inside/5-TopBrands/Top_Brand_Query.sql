@@ -1,6 +1,6 @@
 SELECT 
     b.name AS brand_name,
-    COUNT(p.id) AS total_product,
+    COUNT(p.id) AS total_orders,
     IFNULL(SUM(s.total_current_sale), 0) AS current_sale,
     IFNULL(SUM(s.total_sale_amount), 0) AS sale_amount,
     IFNULL(SUM(ps.previous_total_sale), 0) AS previous_sale,
@@ -9,9 +9,8 @@ SELECT
             WHEN IFNULL(SUM(ps.previous_total_sale), 0) = 0 THEN 0
             ELSE (IFNULL(SUM(s.total_current_sale), 0) - IFNULL(SUM(ps.previous_total_sale), 0)) / IFNULL(SUM(ps.previous_total_sale), 1) * 100
         END, 2
-    ) AS percentage_change,
-    CONCAT('https://beautyboothqa.com/brands/', b.slug) AS link
-FROM brands AS b
+    ) AS percentage_change
+FROM bbbd_ecommerce_test.brands AS b
 -- Join with products to get product details
 JOIN products AS p ON p.brand_id = b.id
 -- Join with the current sales data for the fixed products
@@ -21,9 +20,9 @@ LEFT JOIN (
         ROUND(SUM(od.quantity)) AS total_current_sale,
         ROUND(SUM(od.quantity * od.price)) AS total_sale_amount
     FROM 
-        order_details AS od
+        bbbd_ecommerce_test.order_details AS od
     WHERE 
-        od.created_at >= '2025-02-07 00:00:00' AND od.created_at < '2025-02-09 00:00:00'
+        DATE(od.created_at) >= '2025-02-01' AND DATE(od.created_at) <= '2025-02-09'
     GROUP BY 
         od.product_id
 ) AS s ON p.id = s.product_id
@@ -33,9 +32,9 @@ LEFT JOIN (
         od.product_id,
         ROUND(SUM(od.quantity)) AS previous_total_sale
     FROM 
-        order_details AS od
+        bbbd_ecommerce_test.order_details AS od
     WHERE 
-        od.created_at >= '2025-02-01 00:00:00' AND od.created_at < '2025-02-07 00:00:00' -- Adjusted date range for previous sales
+         DATE(od.created_at) >= '2025-02-01' AND DATE(od.created_at) <= '2025-02-09'
     GROUP BY 
         od.product_id
 ) AS ps ON p.id = ps.product_id
