@@ -1,97 +1,98 @@
 SELECT 
-    b.name AS brand_name,
-    COUNT(p.id) AS total_orders,
-    IFNULL(SUM(s.total_current_sale), 0) AS current_sale,
-    IFNULL(SUM(s.total_sale_amount), 0) AS sale_amount,
-    IFNULL(SUM(ps.previous_total_sale), 0) AS previous_sale,
+    b.id AS brand_id, 
+    b.name AS brand_name, 
+    COUNT(DISTINCT od.product_id) AS orders, 
+    ROUND(COALESCE(SUM(od.quantity * od.price), 0)) AS amount,
     ROUND(
-        CASE 
-            WHEN IFNULL(SUM(ps.previous_total_sale), 0) = 0 THEN 0
-            ELSE (IFNULL(SUM(s.total_current_sale), 0) - IFNULL(SUM(ps.previous_total_sale), 0)) / IFNULL(SUM(ps.previous_total_sale), 1) * 100
-        END, 2
+        COALESCE(
+            (
+                (
+                    SELECT COUNT(*) 
+                    FROM bbbd_ecommerce_test.order_details AS od_new
+                    WHERE DATE(od_new.created_at) >= '2025-02-08' 
+                    AND DATE(od_new.created_at) <= '2025-02-09' 
+                    AND od_new.product_id IN (SELECT id FROM bbbd_ecommerce_test.products WHERE brand_id = b.id)
+                ) - 
+                (
+                    SELECT COUNT(*) 
+                    FROM bbbd_ecommerce_test.order_details AS od_old
+                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
+                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    AND od_old.product_id IN (SELECT id FROM bbbd_ecommerce_test.products WHERE brand_id = b.id)
+                )
+            ) / NULLIF(
+                (
+                    SELECT COUNT(*) 
+                    FROM bbbd_ecommerce_test.order_details AS od_old
+                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
+                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    AND od_old.product_id IN (SELECT id FROM bbbd_ecommerce_test.products WHERE brand_id = b.id)
+                ), 0
+            ) * 100, 0.00
+        ), 2
     ) AS percentage_change
-FROM bbbd_ecommerce_test.brands AS b
--- Join with products to get product details
-JOIN products AS p ON p.brand_id = b.id
--- Join with the current sales data for the fixed products
-LEFT JOIN (
-    SELECT 
-        od.product_id,
-        ROUND(SUM(od.quantity)) AS total_current_sale,
-        ROUND(SUM(od.quantity * od.price)) AS total_sale_amount
-    FROM 
-        bbbd_ecommerce_test.order_details AS od
-    WHERE 
-        DATE(od.created_at) >= '2025-02-01' AND DATE(od.created_at) <= '2025-02-09'
-    GROUP BY 
-        od.product_id
-) AS s ON p.id = s.product_id
--- Join with previous sales data for the fixed products
-LEFT JOIN (
-    SELECT 
-        od.product_id,
-        ROUND(SUM(od.quantity)) AS previous_total_sale
-    FROM 
-        bbbd_ecommerce_test.order_details AS od
-    WHERE 
-         DATE(od.created_at) >= '2025-02-01' AND DATE(od.created_at) <= '2025-02-09'
-    GROUP BY 
-        od.product_id
-) AS ps ON p.id = ps.product_id
+FROM 
+    bbbd_ecommerce_test.order_details od
+JOIN 
+    bbbd_ecommerce_test.products p ON od.product_id = p.id
+JOIN 
+    bbbd_ecommerce_test.brands b ON p.brand_id = b.id
+WHERE 
+    DATE(od.created_at) >= '2025-02-08' 
+    AND DATE(od.created_at) <= '2025-02-09'
 GROUP BY 
-    b.id
+    b.id, b.name
 ORDER BY 
-    SUM(s.total_current_sale) DESC
-LIMIT 0, 50000;
-
-
-
+    orders DESC
+LIMIT 1000;
 ------------------------------------------ Search Brand,Category & Products ---------------------------------------------
 SELECT 
-    b.name AS brand_name,
-    ROUND(COUNT(p.id)) AS total_product,
-    IFNULL(SUM(s.total_current_sale), 0) AS total_current_sale,
-    IFNULL(SUM(s.total_sale_amount), 0) AS total_sale_amount,
-    IFNULL(SUM(ps.previous_total_sale), 0) AS total_previous_sale,
+    b.id AS brand_id, 
+    b.name AS brand_name, 
+    COUNT(DISTINCT od.product_id) AS orders, 
+    ROUND(COALESCE(SUM(od.quantity * od.price), 0)) AS amount,
     ROUND(
-        CASE 
-            WHEN IFNULL(SUM(ps.previous_total_sale), 0) = 0 THEN 0
-            ELSE (IFNULL(SUM(s.total_current_sale), 0) - IFNULL(SUM(ps.previous_total_sale), 0)) / IFNULL(SUM(ps.previous_total_sale), 1) * 100
-        END, 2
+        COALESCE(
+            (
+                (
+                    SELECT COUNT(*) 
+                    FROM bbbd_ecommerce_test.order_details AS od_new
+                    WHERE DATE(od_new.created_at) >= '2025-02-08' 
+                    AND DATE(od_new.created_at) <= '2025-02-09' 
+                    AND od_new.product_id IN (SELECT id FROM bbbd_ecommerce_test.products WHERE brand_id = b.id)
+                ) - 
+                (
+                    SELECT COUNT(*) 
+                    FROM bbbd_ecommerce_test.order_details AS od_old
+                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
+                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    AND od_old.product_id IN (SELECT id FROM bbbd_ecommerce_test.products WHERE brand_id = b.id)
+                )
+            ) / NULLIF(
+                (
+                    SELECT COUNT(*) 
+                    FROM bbbd_ecommerce_test.order_details AS od_old
+                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
+                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    AND od_old.product_id IN (SELECT id FROM bbbd_ecommerce_test.products WHERE brand_id = b.id)
+                ), 0
+            ) * 100, 0.00
+        ), 2
     ) AS percentage_change
-FROM brands AS b
--- Join with products to get product details
-JOIN products AS p ON p.brand_id = b.id
--- Join with the current sales data for the fixed products
-LEFT JOIN (
-    SELECT 
-        od.product_id,
-        ROUND(SUM(od.quantity)) AS total_current_sale,
-        ROUND(SUM(od.quantity * od.price)) AS total_sale_amount
-    FROM 
-        order_details AS od
-    WHERE 
-        DATE(od.created_at) >= '2025-02-07' AND DATE(od.created_at) <= '2025-02-08')
-    GROUP BY 
-        od.product_id
-) AS s ON p.id = s.product_id
--- Join with previous sales data for the fixed products
-LEFT JOIN (
-    SELECT 
-        od.product_id,
-        ROUND(SUM(od.quantity)) AS previous_total_sale
-    FROM 
-        order_details AS od
-    WHERE 
-        DATE(od.created_at) >= '2025-02-07' AND DATE(od.created_at) <= '2025-02-08')
-    GROUP BY 
-        od.product_id
-) AS ps ON p.id = ps.product_id
+FROM 
+    bbbd_ecommerce_test.order_details od
+JOIN 
+    bbbd_ecommerce_test.products p ON od.product_id = p.id
+JOIN 
+    bbbd_ecommerce_test.brands b ON p.brand_id = b.id
 WHERE 
- --p.id=136
- --p.category_id=255
- --p.brand_id=14
+    DATE(od.created_at) >= '2025-02-08' 
+    AND DATE(od.created_at) <= '2025-02-09'
+	--AND p.id=136
+	--AND p.category_id=255
+	--AND p.brand_id=14
 GROUP BY 
-    b.id
+    b.id, b.name
 ORDER BY 
-    total_current_sale DESC;
+    orders DESC
+LIMIT 1000;
