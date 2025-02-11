@@ -39,7 +39,7 @@ LEFT JOIN (
     FROM 
         order_details AS od
     WHERE 
-        DATE(od.created_at) BETWEEN '2025-01-20' AND '2025-01-21'
+        DATE(od.created_at) BETWEEN '2025-02-01' AND '2025-02-10'
     GROUP BY 
         od.product_id
 ) AS c ON p.id = c.product_id
@@ -56,7 +56,7 @@ LEFT JOIN (
 ) AS t ON p.id = t.product_id
 
 -- Join with variation_location_details for current stock
-LEFT JOIN qatar_pos_db.variation_location_details AS vld ON p.id = vld.product_id
+LEFT JOIN bbbd_ecommerce_test.variation_location_details AS vld ON p.id = vld.product_id
 WHERE 
 	vld.location_id = 1;
 
