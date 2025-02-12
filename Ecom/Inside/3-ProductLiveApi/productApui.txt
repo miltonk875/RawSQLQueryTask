@@ -1,0 +1,5 @@
+Main API:
+https://admin.beautybooth.qa/api/ecom_products?
+Search API:
+https://admin.beautybooth.qa/api/ecom_products?product_id={id}&brand_id={id}&category_id={id}&product_name={name}
+
