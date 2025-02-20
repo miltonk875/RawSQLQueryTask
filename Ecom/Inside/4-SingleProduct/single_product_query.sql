@@ -176,4 +176,3 @@ HAVING total_wishlist != 0 OR total_cart_items != 0
 ORDER BY p.id;
 
 -------------------------------------------- Product Prices ------------------------------------------
-
