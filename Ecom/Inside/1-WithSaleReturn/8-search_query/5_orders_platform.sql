@@ -5,7 +5,11 @@ FROM
     bbbd_ecommerce_test.orders AS o
 JOIN 
     bbbd_ecommerce_test.order_details od ON od.order_id = o.id
+JOIN
+    bbbd_ecommerce_test.products p ON od.product_id = p.id
 WHERE 
-    DATE(o.created_at) >= '2025-02-12'
-    AND DATE(o.created_at) <= '2025-02-12'
-    AND od.product_id='5608'
+    DATE(o.created_at) >= '2025-02-18'
+    AND DATE(o.created_at) <= '2025-02-20'
+    -- AND p.id=136
+     -- AND p.brand_id=14
+      -- AND p.category_id=255
