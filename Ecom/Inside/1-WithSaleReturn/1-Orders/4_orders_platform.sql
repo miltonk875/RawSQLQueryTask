@@ -4,6 +4,6 @@ SELECT
 FROM 
     bbbd_ecommerce_test.orders AS o
 WHERE 
-    DATE(o.created_at) >= '2025-02-01'
+    DATE(o.created_at) >= '2025-02-028'
     AND DATE(o.created_at) <= '2025-02-08';
 	
