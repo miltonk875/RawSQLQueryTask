@@ -6,7 +6,10 @@ FROM
 JOIN 
     pos.transactions ts ON tsl.transaction_id = ts.id
 WHERE 
-	ts.vendor_id IN (2,3,5)
+	ts.business_id = 1 
+	AND ts.location_id = 1 
+	AND ts.created_by = 1 
+	AND ts.type = 'sell'
     AND tsl.product_id = 136
     AND DATE(ts.created_at) BETWEEN '2025-02-25' AND '2025-02-28';
 	
@@ -32,7 +35,10 @@ FROM
         JOIN 
             pos.transactions ts ON tsl.transaction_id = ts.id
         WHERE 
-			ts.vendor_id IN (2,3,5)
+			ts.business_id = 1 
+			AND ts.location_id = 1 
+			AND ts.created_by = 1 
+			AND ts.type = 'sell'
 			AND tsl.product_id = 136
             AND DATE(ts.created_at) BETWEEN '2025-02-25' AND '2025-02-28'
     ) AS new,
@@ -45,7 +51,10 @@ FROM
         JOIN 
             pos.transactions ts ON tsl.transaction_id = ts.id
         WHERE 
-			ts.vendor_id IN (2,3,5)
+			ts.business_id = 1 
+			AND ts.location_id = 1 
+			AND ts.created_by = 1 
+			AND ts.type = 'sell'
 			AND tsl.product_id = 136
             AND DATE(ts.created_at) BETWEEN '2025-02-21' AND '2025-02-24'
     ) AS old;
