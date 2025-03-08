@@ -1,0 +1,1 @@
+select id, name from pos.vendors WHERE id IN (2,3,5);
