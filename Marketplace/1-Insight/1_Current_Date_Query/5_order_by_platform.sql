@@ -8,7 +8,7 @@ SELECT
        FROM pos.transactions 
        WHERE vendor_id IN (2,3,5) 
        AND type = 'sell'
-       AND DATE(created_at) BETWEEN '2025-03-05' AND '2025-03-05')
+       AND DATE(created_at) BETWEEN '2025-03-06' AND '2025-03-08')
     ) * 100, 2
   ) AS order_percentage
 FROM 
@@ -18,6 +18,6 @@ JOIN
 WHERE 
 	ts.vendor_id IN (2,3,5)
 	AND ts.type = 'sell'
-	AND DATE(ts.created_at) BETWEEN '2025-03-05' AND '2025-03-05'
+	AND DATE(ts.created_at) BETWEEN '2025-03-09' AND '2025-03-09'
 GROUP BY 
 	ts.vendor_id;
