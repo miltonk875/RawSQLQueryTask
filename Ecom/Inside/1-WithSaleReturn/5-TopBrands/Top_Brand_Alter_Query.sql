@@ -68,9 +68,9 @@ FROM
             bbbd_ecommerce_test.products p ON od.product_id = p.id
         WHERE 
             od.created_at BETWEEN '2025-02-01' AND '2025-02-31'
-		--AND p.id=136
-		--AND p.category_id=255
-		--AND p.brand_id=14
+		AND p.id=136
+		-- AND p.category_id=255
+		-- AND p.brand_id=14
         GROUP BY 
             p.brand_id
     ) bo

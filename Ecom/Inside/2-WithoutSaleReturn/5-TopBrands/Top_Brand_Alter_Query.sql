@@ -70,7 +70,7 @@ FROM
         JOIN 
             bbbd_ecommerce_test.products p ON od.product_id = p.id
         WHERE 
-            od.created_at BETWEEN '2025-02-01' AND '2025-02-31'
+            od.created_at BETWEEN '2025-03-09' AND '2025-03-15'
             AND od.delivery_status != 'cancelled'
 				
 		AND p.id=136
@@ -85,8 +85,8 @@ LEFT JOIN
     (
         SELECT 
             p.brand_id, 
-            SUM(CASE WHEN od.created_at BETWEEN '2025-02-01' AND '2025-02-31' THEN 1 ELSE 0 END) AS current_orders,
-            SUM(CASE WHEN od.created_at BETWEEN '2025-01-01' AND '2025-01-31' THEN 1 ELSE 0 END) AS previous_orders
+            SUM(CASE WHEN od.created_at BETWEEN '2025-03-09' AND '2025-03-15' THEN 1 ELSE 0 END) AS current_orders,
+            SUM(CASE WHEN od.created_at BETWEEN '2025-03-02' AND '2025-03-08' THEN 1 ELSE 0 END) AS previous_orders
         FROM 
             bbbd_ecommerce_test.order_details od
         JOIN 
