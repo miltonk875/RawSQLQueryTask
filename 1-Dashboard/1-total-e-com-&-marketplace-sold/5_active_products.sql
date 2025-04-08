@@ -1,0 +1,1 @@
+select count(*) as ecom_active_products from bbbd_ecommerce_test.products where published=1

@@ -14,7 +14,7 @@ SELECT
     CASE 
         WHEN COALESCE(ep.discount, 0) = 0 THEN 0
         ELSE 1 
-    END AS ep_discount_have,
+    END AS ep_discount_have, 
 
     '' AS ecom_end,
     CAST(tsl.quantity AS UNSIGNED) AS pos_quantity,
