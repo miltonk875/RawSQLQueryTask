@@ -86,7 +86,7 @@ LEFT JOIN pos.variation_location_details AS vld ON p.id = vld.product_id
 
 WHERE   
     cp.campaign_id = 38  
-
+-- AND cp.product_id IN (2,3,5)
 GROUP BY   
     p.id  
 
