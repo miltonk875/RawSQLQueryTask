@@ -21,7 +21,7 @@ FROM
       JOIN 
           bbbd_ecommerce_test.products p ON od.product_id = p.id
       WHERE 
-          od.created_at BETWEEN '2025-04-01' AND '2025-04-21'
+          DATE(od.created_at) >= '2025-04-21' AND DATE(od.created_at) <= '2025-04-21'
       GROUP BY 
           p.brand_id
   ) bo
@@ -31,8 +31,8 @@ LEFT JOIN
   (
       SELECT 
           p.brand_id, 
-            SUM(CASE WHEN od.created_at BETWEEN '2025-04-01' AND '2025-04-21' THEN 1 ELSE 0 END) AS current_orders,
-            SUM(CASE WHEN od.created_at BETWEEN '2025-03-01' AND '2025-03-21' THEN 1 ELSE 0 END) AS previous_orders
+            SUM(CASE WHEN DATE(od.created_at) >= '2025-04-21' AND DATE(od.created_at) <= '2025-04-21' THEN 1 ELSE 0 END) AS current_orders,
+            SUM(CASE WHEN DATE(od.created_at) >= '2025-04-20' AND DATE(od.created_at) <= '2025-04-20' THEN 1 ELSE 0 END) AS previous_orders
       FROM 
           bbbd_ecommerce_test.order_details od
       JOIN 
@@ -40,7 +40,7 @@ LEFT JOIN
       GROUP BY 
           p.brand_id
   ) oc ON bo.brand_id = oc.brand_id
-ORDER BY bo.orders DESC;
+ORDER BY bo.orders DESC
 
 ------------------------------------------ Search Brand,Category & Products ---------------------------------------------
 SELECT 
@@ -66,7 +66,7 @@ FROM
         JOIN 
             bbbd_ecommerce_test.products p ON od.product_id = p.id
         WHERE 
-            od.created_at BETWEEN '2025-02-01' AND '2025-02-31'
+            DATE(od.created_at) >= '2025-04-21' AND DATE(od.created_at) <= '2025-04-21'
 		AND p.id=136
 		-- AND p.category_id=255
 		-- AND p.brand_id=14
@@ -79,8 +79,8 @@ LEFT JOIN
     (
         SELECT 
             p.brand_id, 
-            SUM(CASE WHEN od.created_at BETWEEN '2025-02-01' AND '2025-02-31' THEN 1 ELSE 0 END) AS current_orders,
-            SUM(CASE WHEN od.created_at BETWEEN '2025-01-01' AND '2025-01-31' THEN 1 ELSE 0 END) AS previous_orders
+            SUM(CASE WHEN DATE(od.created_at) >= '2025-04-21' AND DATE(od.created_at) <= '2025-04-21' THEN 1 ELSE 0 END) AS current_orders,
+            SUM(CASE WHEN DATE(od.created_at) >= '2025-04-20' AND DATE(od.created_at) <= '2025-04-20' THEN 1 ELSE 0 END) AS previous_orders
         FROM 
             bbbd_ecommerce_test.order_details od
         JOIN 
