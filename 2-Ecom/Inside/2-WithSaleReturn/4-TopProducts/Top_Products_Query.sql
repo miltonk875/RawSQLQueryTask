@@ -1,7 +1,7 @@
 SELECT 
     p.id AS product_id, 
     p.name AS product_name, 
-    COUNT(od.product_id) AS orders,
+    SUM(od.quantity) AS orders,
     ROUND(COALESCE(SUM(od.quantity * od.price), 0)) AS amount,
     ROUND(
         COALESCE(
@@ -9,27 +9,24 @@ SELECT
                 (
                     SELECT COUNT(*) 
                     FROM bbbd_ecommerce_test.order_details AS od_new
-                    WHERE DATE(od_new.created_at) >= '2025-02-08' 
-                    AND DATE(od_new.created_at) <= '2025-02-09' 
+                    WHERE DATE(od_new.created_at) >= '2025-04-23' 
+                    AND DATE(od_new.created_at) <= '2025-04-23' 
                     AND od_new.product_id = p.id
-					AND od_new.delivery_status='cancelled'
                 ) - 
                 (
                     SELECT COUNT(*) 
                     FROM bbbd_ecommerce_test.order_details AS od_old
-                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
-                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    WHERE DATE(od_old.created_at) >= '2025-04-22' 
+                    AND DATE(od_old.created_at) <= '2025-04-22' 
                     AND od_old.product_id = p.id
-					AND od_old.delivery_status='cancelled'
                 )
             ) / NULLIF(
                 (
                     SELECT COUNT(*) 
                     FROM bbbd_ecommerce_test.order_details AS od_old
-                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
-                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    WHERE DATE(od_old.created_at) >= '2025-04-22' 
+                    AND DATE(od_old.created_at) <= '2025-04-22' 
                     AND od_old.product_id = p.id
-					AND od_old.delivery_status='cancelled'
                 ), 0
             ) * 100, 0.00
         ), 2
@@ -39,8 +36,7 @@ FROM
 JOIN 
     bbbd_ecommerce_test.products p ON od.product_id = p.id
 WHERE 
-    DATE(od.created_at) >= '2025-02-08' 
-    AND DATE(od.created_at) <= '2025-02-09'
+    DATE(od.created_at) >= '2025-04-24' AND DATE(od.created_at) <= '2025-04-24'
 	AND od.delivery_status='cancelled'
 GROUP BY 
     p.id, p.name
@@ -52,7 +48,7 @@ LIMIT 1000;
 SELECT 
     p.id AS product_id, 
     p.name AS product_name, 
-    COUNT(od.product_id) AS orders,
+    SUM(od.quantity) AS orders,
     ROUND(COALESCE(SUM(od.quantity * od.price), 0)) AS amount,
     ROUND(
         COALESCE(
@@ -60,27 +56,24 @@ SELECT
                 (
                     SELECT COUNT(*) 
                     FROM bbbd_ecommerce_test.order_details AS od_new
-                    WHERE DATE(od_new.created_at) >= '2025-02-08' 
-                    AND DATE(od_new.created_at) <= '2025-02-09' 
+                    WHERE DATE(od_new.created_at) >= '2025-04-23' 
+                    AND DATE(od_new.created_at) <= '2025-04-23' 
                     AND od_new.product_id = p.id
-					AND od_new.delivery_status='cancelled'
                 ) - 
                 (
                     SELECT COUNT(*) 
                     FROM bbbd_ecommerce_test.order_details AS od_old
-                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
-                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    WHERE DATE(od_old.created_at) >= '2025-04-22' 
+                    AND DATE(od_old.created_at) <= '2025-04-22' 
                     AND od_old.product_id = p.id
-					AND od_old.delivery_status='cancelled'
                 )
             ) / NULLIF(
                 (
                     SELECT COUNT(*) 
                     FROM bbbd_ecommerce_test.order_details AS od_old
-                    WHERE DATE(od_old.created_at) >= '2025-02-06' 
-                    AND DATE(od_old.created_at) <= '2025-02-07' 
+                    WHERE DATE(od_old.created_at) >= '2025-04-22' 
+                    AND DATE(od_old.created_at) <= '2025-04-22' 
                     AND od_old.product_id = p.id
-					AND od_old.delivery_status='cancelled'
                 ), 0
             ) * 100, 0.00
         ), 2
@@ -90,8 +83,7 @@ FROM
 JOIN 
     bbbd_ecommerce_test.products p ON od.product_id = p.id
 WHERE 
-    DATE(od.created_at) >= '2025-02-01' 
-    AND DATE(od.created_at) <= '2025-02-09'
+    DATE(od.created_at) >= '2025-04-24' AND DATE(od.created_at) <= '2025-04-24'
 	AND od.delivery_status='cancelled'
 	--AND p.id=136
 	--AND p.category_id=255
