@@ -23,8 +23,16 @@ SELECT
     DATE_FORMAT(orders.created_at, '%Y-%m-%d') AS order_date,
 	orders.courier_sent as courier_sent,
 	orders.sent_date as sent_date,
-	orders.consignment_id as consignment_id
+	orders.consignment_id as consignment_id,
+	DATE_FORMAT(ou.created_at, '%l:%i %p') AS processing_time,
+    DATE_FORMAT(ou.created_at, '%Y-%m-%d') AS processing_date
 FROM 
     orders
+JOIN 
+	order_updates AS ou ON orders.id = ou.order_id
+where 
+	ou.status='processing'
+	
 ORDER BY 
-    orders.id DESC;
+    orders.id ASC;
+	
