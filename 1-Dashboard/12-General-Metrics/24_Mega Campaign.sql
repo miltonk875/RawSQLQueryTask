@@ -1,0 +1,1 @@
+select COUNT(*) as total_products from campaign_products WHERE campaign_id=30
