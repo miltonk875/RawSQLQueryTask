@@ -1,0 +1,1 @@
+select COUNT(*) as total_clearance_sale from campaign_products WHERE campaign_id=9
