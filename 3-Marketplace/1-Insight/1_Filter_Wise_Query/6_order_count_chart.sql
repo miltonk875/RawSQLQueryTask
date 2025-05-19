@@ -6,7 +6,7 @@ SELECT
 FROM 
   pos.pos_orders AS po
 JOIN 
-  vendors AS v ON po.vendor_id = v.id
+  pos.vendors AS v ON po.vendor_id = v.id
 WHERE  
     po.vendor_id IN (2,3,5)  
     AND po.order_type = 'sell'  
